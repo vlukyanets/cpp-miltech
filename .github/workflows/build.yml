@@ -56,3 +56,7 @@ jobs:
             cmake --build --preset debug
             cmake --preset aarch64-debug
             cmake --build --preset aarch64-debug
+            cmake --preset release
+            cmake --build --preset release
+            cmake --preset relwithdebinfo
+            cmake --build --preset relwithdebinfo
