@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include <fstream>
 
@@ -17,7 +18,21 @@ struct RobotPosition {
     double x;
     double y;
     double theta;
+
+    // Update robot position method
+    void update(const long ts, const double d, const double dtheta) {
+        timestamp_ms = ts;
+        x += d * std::cos(theta + dtheta / 2.0);
+        y += d * std::sin(theta + dtheta / 2.0);
+        theta += dtheta;
+    }
 };
+
+// Print RobotPosition to output stream
+std::ostream& operator<<(std::ostream& os, const RobotPosition& rp) {
+    os << rp.timestamp_ms << " " << rp.x << " " << rp.y << " " << rp.theta;
+    return os;
+}
 
 // Struct that contains odometry reading and timestamp
 struct RobotOdometryReading {
@@ -72,6 +87,12 @@ int main(int argc, char** argv) {
 
         const double d = (dl + dr) / 2.0;
         const double dtheta = (dr - dl) / robot::params::wheelbase_m;
+
+        // Update robot position info
+        robot_position.update(current_reading.timestamp_ms, d, dtheta);
+
+        // Output robot position info
+        std::cout << std::setprecision(4) << robot_position << std::endl;
 
         // Current reading become previous on the next iteration of loop
         prev_reading = current_reading;
