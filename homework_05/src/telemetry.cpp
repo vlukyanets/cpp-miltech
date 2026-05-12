@@ -1,13 +1,10 @@
 #include "telemetry.hpp"
 
+#include <limits>
+#include <cmath>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-
-// Debugging exercise notes:
-// this file intentionally contains four runtime defects.
-// The defects are related to malformed input shape, invalid numeric values,
-// unsafe time deltas, and empty logs. Exact locations are not marked on purpose.
 
 const int EXPECTED_FIELD_COUNT = 7;
 const int MAX_LINE_LENGTH = 256;
@@ -81,9 +78,9 @@ Frame parse_frame(char line[]) {
 }
 
 double compute_frame_rate_hz(const Frame frames[], int frame_count) {
-    const long elapsed_ms = frames[frame_count - 1].timestamp_ms - frames[0].timestamp_ms;
+    const long elapsed_ms = frame_count > 0 ? frames[frame_count - 1].timestamp_ms - frames[0].timestamp_ms : 0;
 
-    return static_cast<double>((frame_count - 1) * 1000 / elapsed_ms);
+    return elapsed_ms == 0 ? std::numeric_limits<double>::quiet_NaN() : static_cast<double>((frame_count - 1) * 1000 / elapsed_ms);
 }
 
 int read_frames(const char* path, Frame frames[], int max_frames) {
@@ -114,9 +111,11 @@ Summary summarize(const Frame frames[], int frame_count) {
     Summary summary{};
     summary.frames_total = frame_count;
     summary.frames_valid = frame_count;
-    summary.voltage_min = frames[0].voltage_v;
-    summary.voltage_max = frames[0].voltage_v;
     summary.low_voltage_frames = 0;
+    if (frame_count > 0) {
+        summary.voltage_min = frames[0].voltage_v;
+        summary.voltage_max = frames[0].voltage_v;
+    }
 
     double temperature_sum = 0.0;
 
@@ -136,13 +135,26 @@ Summary summarize(const Frame frames[], int frame_count) {
         }
     }
 
-    const int temperature_tenths = static_cast<int>(temperature_sum * 10.0) / frame_count;
-    summary.temperature_avg = static_cast<double>(temperature_tenths) / 10.0;
+    if (frame_count > 0) {
+        const int temperature_tenths = static_cast<int>(temperature_sum * 10.0) / frame_count;
+        summary.temperature_avg = static_cast<double>(temperature_tenths) / 10.0;
+    }
     summary.frame_rate_hz = compute_frame_rate_hz(frames, frame_count);
+
     return summary;
 }
 
 void print_summary(const Summary& summary) {
+    if (summary.frames_total <= 0) {
+        std::cerr << "No frames - cannot generate summary\n";
+        return;
+    }
+
+    if (std::isnan(summary.frame_rate_hz)) {
+        std::cerr << "No time difference in frames - cannot calculate frame rate Hz\n";
+        return;
+    }
+
     std::cout << "frames_total " << summary.frames_total << '\n';
     std::cout << "frames_valid " << summary.frames_valid << '\n';
     std::cout << "voltage_min " << summary.voltage_min << '\n';
