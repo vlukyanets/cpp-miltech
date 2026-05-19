@@ -13,22 +13,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build inside dev container
+      - name: Build
         uses: devcontainers/ci@v0.3
         with:
           push: never
           runCmd: |
             cmake --preset debug
             cmake --build --preset debug
-            ctest --preset debug
 
             cmake --preset aarch64-debug
             cmake --build --preset aarch64-debug
 
             cmake --preset release
             cmake --build --preset release
-            ctest --preset release
 
             cmake --preset relwithdebinfo
             cmake --build --preset relwithdebinfo
+
+      - name: Test
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            ctest --preset debug
+            ctest --preset release
             ctest --preset relwithdebinfo
+
+      - name: Quality verify
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            find homework_06 \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \) -print \
+              | xargs clang-format --dry-run --Werror
+            run-clang-tidy -p build/debug 'homework_06/(src|include|tests)/.*\.(cpp|cc|cxx|h|hpp)$'
