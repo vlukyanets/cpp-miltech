@@ -19,9 +19,21 @@
       }
     },
     {
+      "label": "clang-format: reformat project",
+      "type": "shell",
+      "command": "find homework_06 \\( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' \\) -print | xargs clang-format -i",
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
       "label": "clang-tidy: analyze project",
       "type": "shell",
-      "command": "run-clang-tidy -p build/debug 'homework_06+/(src|include|tests)/.*\\.(cpp|cc|cxx|h|hpp)$'",
+      "command": "run-clang-tidy -p build/debug 'homework_06+/(src|include|tests)/.*\\.(cpp|h|hpp)$'",
       "group": "test",
       "problemMatcher": [
         "$gcc"
