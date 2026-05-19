@@ -21,7 +21,7 @@
     {
       "label": "clang-tidy: analyze project",
       "type": "shell",
-      "command": "run-clang-tidy -p build/debug 'homework_[0-9]+/(src|include|tests)/.*\\.(cpp|cc|cxx|h|hpp)$'",
+      "command": "run-clang-tidy -p build/debug 'homework_06+/(src|include|tests)/.*\\.(cpp|cc|cxx|h|hpp)$'",
       "group": "test",
       "problemMatcher": [
         "$gcc"
