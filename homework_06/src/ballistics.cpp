@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "ballistics.hpp"
+#include "coord.hpp"
 
 struct AmmoParams {
   const char* name;
@@ -46,7 +47,8 @@ BallisticsSolution calculate_ballistics(const char* file_name)
   }
 
   // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-  if (BallisticsInput input; ifs >> input) {
+  BallisticsInput input;
+  if (ifs >> input) {
     return calculate_ballistics(input);
   }
 

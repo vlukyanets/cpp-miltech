@@ -1,6 +1,7 @@
-#include "ballistics.hpp"
-
 #include <gtest/gtest.h>
+
+#include "ballistics.hpp"
+#include "coord.hpp"
 
 TEST(Ballistics, ComputesKnownDropPoint)
 {
