@@ -46,7 +46,7 @@ BallisticsSolution calculate_ballistics(const char* file_name)
     return {SolutionResult::FileNotExists};
   }
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init) - struct will be initialized later by reading from input stream
   BallisticsInput input;
   if (ifs >> input) {
     return calculate_ballistics(input);
@@ -61,13 +61,13 @@ BallisticsSolution calculate_ballistics(const BallisticsInput& input)
     return {SolutionResult::NegativeAltitude};
   }
 
-  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
+  // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay) - disabled to avoid pointer warnings
   std::optional<AmmoParams> foundAmmo = findAmmo(input.ammo_name);
   if (!foundAmmo.has_value()) {
     return {SolutionResult::UnknownAmmoName};
   }
 
-  // NOLINTBEGIN(readability-identifier-length)
+  // NOLINTBEGIN(readability-identifier-length) - disabled to keep a lot of variables with short names
   const double g = 9.81;
   const double m = foundAmmo->mass;
   const double d = foundAmmo->drag;

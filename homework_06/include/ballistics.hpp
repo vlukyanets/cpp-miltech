@@ -13,7 +13,8 @@ struct BallisticsInput {
   double altitude;
   double attack_speed;
   double acceleration_path;
-  char ammo_name[maxNameLength];  // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays) - std::string is not used so C array is required
+  char ammo_name[maxNameLength];
 };
 
 enum class SolutionResult : uint8_t { Ok, NegativeAltitude, UnknownAmmoName, FileNotExists, BadFileData, OtherError };

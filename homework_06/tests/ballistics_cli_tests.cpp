@@ -13,7 +13,7 @@
 static int run_cli(const char* program, const char* args, std::string& output)
 {
   const std::string cmdline = std::string(program) + " " + args + " 2>&1";
-  std::FILE* pipe = popen(cmdline.c_str(), "r");  // NOLINT(cert-env33-c)
+  std::FILE* pipe = popen(cmdline.c_str(), "r");
 
   output.clear();
   std::array<char, 256> buf{};
@@ -28,7 +28,7 @@ static int run_cli(const char* program, const char* args, std::string& output)
 
 class BallisticsCliTest : public ::testing::Test {
 protected:
-  // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
+  // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes) - GTest require to use protected variables
   int exitCode{-1};           // This value means program haven't been run
   std::string output;         // Whole output content in the string
   std::istringstream stream;  // STL way to read output
@@ -58,7 +58,9 @@ TEST_F(BallisticsCliTest, ComputesKnownDropPoint)
 {
   runWithFile("compute_known_drop_point.txt");
   EXPECT_EQ(exitCode, 0);
-  double fire_x, fire_y;  // NOLINT(cppcoreguidelines-init-variables,readability-isolate-declaration)
+
+  // NOLINTNEXTLINE(cppcoreguidelines-init-variables,readability-isolate-declaration) - disabled because values will be read later
+  double fire_x, fire_y;
   stream >> fire_x >> fire_y;
   EXPECT_NEAR(fire_x, 173.759, 0.01);
   EXPECT_NEAR(fire_y, 173.759, 0.01);
