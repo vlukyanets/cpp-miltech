@@ -24,8 +24,8 @@ TEST(Ballistics, ComputesKnownDropPoint)
 TEST(Ballistics, NegativeAltitude)
 {
   const BallisticsInput input{
-    .position{100.0, 100.0},
-    .target{200.0, 200.0},
+    .position{.x = 100.0, .y = 100.0},
+    .target{.x = 200.0, .y = 200.0},
     .altitude = -100.0,
     .attack_speed = 10.0,
     .acceleration_path = 10.0,
@@ -40,8 +40,8 @@ TEST(Ballistics, NegativeAltitude)
 TEST(Ballistics, UnknownAmmoName)
 {
   const BallisticsInput input{
-    .position{100.0, 100.0},
-    .target{200.0, 200.0},
+    .position{.x = 100.0, .y = 100.0},
+    .target{.x = 200.0, .y = 200.0},
     .altitude = -100.0,
     .attack_speed = 10.0,
     .acceleration_path = 10.0,
