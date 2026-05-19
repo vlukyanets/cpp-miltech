@@ -46,4 +46,4 @@ jobs:
           runCmd: |
             find homework_06 \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \) -print \
               | xargs clang-format --dry-run --Werror
-            run-clang-tidy -p build/debug 'homework_06/(src|include|tests)/.*\.(cpp|cc|cxx|h|hpp)$'
+            run-clang-tidy -p build/debug 'homework_06/(src|include|tests)/.*\.(cpp|h|hpp)$'
