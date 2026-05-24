@@ -18,6 +18,7 @@ enable_testing()
 add_subdirectory(homework_04)
 add_subdirectory(homework_05)
 add_subdirectory(homework_06)
+add_subdirectory(homework_07)
 
 # Add demo
 add_subdirectory(demos/lesson_2_4/debug_probe)
