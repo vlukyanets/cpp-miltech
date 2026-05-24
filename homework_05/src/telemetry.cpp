@@ -148,7 +148,7 @@ bool read_frames(const char* path, Frame frames[], int max_frames, int& frame_co
         }
     }
 
-    return true;
+    return frame_count > 0;
 }
 
 bool validate_frames(const Frame frames[], int frame_count) {
